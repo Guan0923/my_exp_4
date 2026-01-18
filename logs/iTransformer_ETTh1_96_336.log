@@ -1,0 +1,168 @@
+Args in experiment:
+Namespace(is_training=1, model_id='iTransformer_ETTh1', model='iTransformer', rate=4, iter=20, alpha=0.1, beta=0.1, data='ETTh1', root_path='./dataset/ETT-small/', data_path='ETTh1.csv', features='M', target='OT', freq='h', checkpoints='./checkpoints/', seq_len=96, label_len=48, pred_len=336, enc_in=7, dec_in=7, c_out=7, d_model=256, n_heads=8, e_layers=6, d_layers=1, d_ff=256, moving_avg=25, factor=1, distil=True, dropout=0.1, embed='timeF', activation='gelu', output_attention=False, do_predict=False, num_workers=10, itr=3, train_epochs=10, batch_size=32, patience=3, learning_rate=0.0001, des='Exp', loss='MSE', lradj='type1', use_amp=False, use_gpu=True, gpu=0, use_multi_gpu=False, devices='0,1,2,3', exp_name='MTSF', channel_independence=False, inverse=False, class_strategy='projection', target_root_path='./data/electricity/', target_data_path='electricity.csv', efficient_training=False, use_norm=True, partial_start_index=0)
+Use GPU: cuda:0
+>>>>>>>start training : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll336_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 8209
+val 2545
+test 2545
+	iters: 100, epoch: 1 | loss: 0.4499758
+	speed: 0.0474s/iter; left time: 116.5455s
+	iters: 200, epoch: 1 | loss: 0.4707670
+	speed: 0.0313s/iter; left time: 73.9057s
+Epoch: 1 cost time: 8.752699136734009
+Epoch: 1, Steps: 256 | Train Loss: 0.5381357 Vali Loss: 1.2920190 Test Loss: 0.4970607
+Validation loss decreased (inf --> 1.292019).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 100, epoch: 2 | loss: 0.4628914
+	speed: 0.3136s/iter; left time: 691.4813s
+	iters: 200, epoch: 2 | loss: 0.4180622
+	speed: 0.0327s/iter; left time: 68.9211s
+Epoch: 2 cost time: 8.388165473937988
+Epoch: 2, Steps: 256 | Train Loss: 0.4818326 Vali Loss: 1.2723641 Test Loss: 0.4849406
+Validation loss decreased (1.292019 --> 1.272364).  Saving model ...
+Updating learning rate to 5e-05
+	iters: 100, epoch: 3 | loss: 0.3930036
+	speed: 0.3134s/iter; left time: 610.8790s
+	iters: 200, epoch: 3 | loss: 0.3871624
+	speed: 0.0322s/iter; left time: 59.5243s
+Epoch: 3 cost time: 8.37423586845398
+Epoch: 3, Steps: 256 | Train Loss: 0.4585280 Vali Loss: 1.2858859 Test Loss: 0.5013210
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 2.5e-05
+	iters: 100, epoch: 4 | loss: 0.4896202
+	speed: 0.3081s/iter; left time: 521.6491s
+	iters: 200, epoch: 4 | loss: 0.4628169
+	speed: 0.0307s/iter; left time: 48.8779s
+Epoch: 4 cost time: 8.099059581756592
+Epoch: 4, Steps: 256 | Train Loss: 0.4456075 Vali Loss: 1.2887352 Test Loss: 0.4902939
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 1.25e-05
+	iters: 100, epoch: 5 | loss: 0.4106708
+	speed: 0.3055s/iter; left time: 438.9907s
+	iters: 200, epoch: 5 | loss: 0.4436355
+	speed: 0.0318s/iter; left time: 42.5048s
+Epoch: 5 cost time: 8.279523611068726
+Epoch: 5, Steps: 256 | Train Loss: 0.4396241 Vali Loss: 1.3001844 Test Loss: 0.4864379
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll336_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2545
+test shape: (2545, 1, 336, 7) (2545, 1, 336, 7)
+test shape: (2545, 336, 7) (2545, 336, 7)
+Use GPU: cuda:0
+>>>>>>>start training : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll336_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_1>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 8209
+val 2545
+test 2545
+	iters: 100, epoch: 1 | loss: 0.5289381
+	speed: 0.0349s/iter; left time: 85.8498s
+	iters: 200, epoch: 1 | loss: 0.5331733
+	speed: 0.0345s/iter; left time: 81.4668s
+Epoch: 1 cost time: 8.88259220123291
+Epoch: 1, Steps: 256 | Train Loss: 0.5372246 Vali Loss: 1.2936560 Test Loss: 0.5006394
+Validation loss decreased (inf --> 1.293656).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 100, epoch: 2 | loss: 0.4667737
+	speed: 0.3097s/iter; left time: 682.9280s
+	iters: 200, epoch: 2 | loss: 0.5621146
+	speed: 0.0354s/iter; left time: 74.5321s
+Epoch: 2 cost time: 9.038409233093262
+Epoch: 2, Steps: 256 | Train Loss: 0.4827101 Vali Loss: 1.2772160 Test Loss: 0.5038081
+Validation loss decreased (1.293656 --> 1.277216).  Saving model ...
+Updating learning rate to 5e-05
+	iters: 100, epoch: 3 | loss: 0.4625726
+	speed: 0.3216s/iter; left time: 626.7730s
+	iters: 200, epoch: 3 | loss: 0.4512020
+	speed: 0.0312s/iter; left time: 57.6925s
+Epoch: 3 cost time: 8.735354661941528
+Epoch: 3, Steps: 256 | Train Loss: 0.4610654 Vali Loss: 1.2729901 Test Loss: 0.4981507
+Validation loss decreased (1.277216 --> 1.272990).  Saving model ...
+Updating learning rate to 2.5e-05
+	iters: 100, epoch: 4 | loss: 0.4906404
+	speed: 0.3173s/iter; left time: 537.2549s
+	iters: 200, epoch: 4 | loss: 0.4915248
+	speed: 0.0344s/iter; left time: 54.8138s
+Epoch: 4 cost time: 8.794271469116211
+Epoch: 4, Steps: 256 | Train Loss: 0.4480255 Vali Loss: 1.2760241 Test Loss: 0.4985038
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 1.25e-05
+	iters: 100, epoch: 5 | loss: 0.4740923
+	speed: 0.3226s/iter; left time: 463.6065s
+	iters: 200, epoch: 5 | loss: 0.3999375
+	speed: 0.0325s/iter; left time: 43.4662s
+Epoch: 5 cost time: 8.8266122341156
+Epoch: 5, Steps: 256 | Train Loss: 0.4416131 Vali Loss: 1.2801520 Test Loss: 0.4941429
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 6.25e-06
+	iters: 100, epoch: 6 | loss: 0.3854682
+	speed: 0.3198s/iter; left time: 377.6688s
+	iters: 200, epoch: 6 | loss: 0.4735976
+	speed: 0.0323s/iter; left time: 34.9553s
+Epoch: 6 cost time: 8.712885618209839
+Epoch: 6, Steps: 256 | Train Loss: 0.4383324 Vali Loss: 1.2855489 Test Loss: 0.4947308
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll336_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2545
+test shape: (2545, 1, 336, 7) (2545, 1, 336, 7)
+test shape: (2545, 336, 7) (2545, 336, 7)
+Use GPU: cuda:0
+>>>>>>>start training : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll336_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_2>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 8209
+val 2545
+test 2545
+	iters: 100, epoch: 1 | loss: 0.5457548
+	speed: 0.0364s/iter; left time: 89.6062s
+	iters: 200, epoch: 1 | loss: 0.4403164
+	speed: 0.0327s/iter; left time: 77.2423s
+Epoch: 1 cost time: 8.872307300567627
+Epoch: 1, Steps: 256 | Train Loss: 0.5384931 Vali Loss: 1.2910602 Test Loss: 0.5010214
+Validation loss decreased (inf --> 1.291060).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 100, epoch: 2 | loss: 0.4983509
+	speed: 0.3232s/iter; left time: 712.5812s
+	iters: 200, epoch: 2 | loss: 0.4914983
+	speed: 0.0324s/iter; left time: 68.2059s
+Epoch: 2 cost time: 8.85875654220581
+Epoch: 2, Steps: 256 | Train Loss: 0.4824146 Vali Loss: 1.2777129 Test Loss: 0.5052677
+Validation loss decreased (1.291060 --> 1.277713).  Saving model ...
+Updating learning rate to 5e-05
+	iters: 100, epoch: 3 | loss: 0.4974833
+	speed: 0.3185s/iter; left time: 620.8308s
+	iters: 200, epoch: 3 | loss: 0.4782239
+	speed: 0.0331s/iter; left time: 61.1871s
+Epoch: 3 cost time: 8.747682571411133
+Epoch: 3, Steps: 256 | Train Loss: 0.4608616 Vali Loss: 1.2670784 Test Loss: 0.4917535
+Validation loss decreased (1.277713 --> 1.267078).  Saving model ...
+Updating learning rate to 2.5e-05
+	iters: 100, epoch: 4 | loss: 0.4425700
+	speed: 0.3387s/iter; left time: 573.4320s
+	iters: 200, epoch: 4 | loss: 0.4403734
+	speed: 0.0327s/iter; left time: 52.1117s
+Epoch: 4 cost time: 8.9826819896698
+Epoch: 4, Steps: 256 | Train Loss: 0.4467665 Vali Loss: 1.2859085 Test Loss: 0.4827553
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 1.25e-05
+	iters: 100, epoch: 5 | loss: 0.4447871
+	speed: 0.3149s/iter; left time: 452.5667s
+	iters: 200, epoch: 5 | loss: 0.5403817
+	speed: 0.0345s/iter; left time: 46.1291s
+Epoch: 5 cost time: 9.267231464385986
+Epoch: 5, Steps: 256 | Train Loss: 0.4403109 Vali Loss: 1.2835492 Test Loss: 0.4852268
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 6.25e-06
+	iters: 100, epoch: 6 | loss: 0.4860053
+	speed: 0.3166s/iter; left time: 373.9111s
+	iters: 200, epoch: 6 | loss: 0.4511225
+	speed: 0.0328s/iter; left time: 35.4522s
+Epoch: 6 cost time: 8.828310251235962
+Epoch: 6, Steps: 256 | Train Loss: 0.4375329 Vali Loss: 1.2884771 Test Loss: 0.4887695
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll336_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_2<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2545
+test shape: (2545, 1, 336, 7) (2545, 1, 336, 7)
+test shape: (2545, 336, 7) (2545, 336, 7)
+MAE: 0.46762335300445557	MSE: 0.4916151762008667
+RMSE: 0.7011421322822571	MAPE: 10.471920013427734
+MSPE: 42380.75	

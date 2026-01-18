@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from layers.mHC import mHC
+import torch
 
 
 class ConvLayer(nn.Module):
@@ -26,7 +26,7 @@ class ConvLayer(nn.Module):
         return x
 
 
-class EncoderLayer(nn.Module):
+class mHC_EncoderLayer(nn.Module):
     def __init__(
         self,
         attention,
@@ -34,47 +34,49 @@ class EncoderLayer(nn.Module):
         rate,
         iter,
         layer_id,
+        alpha_default=0.1,
+        beta_default=0.1,
         d_ff=None,
         dropout=0.1,
         activation="relu",
     ):
-        super(EncoderLayer, self).__init__()
+        super(mHC_EncoderLayer, self).__init__()
         d_ff = d_ff or 4 * d_model
+        self.d_model = d_model
         self.attention = attention
         self.conv1 = nn.Conv1d(in_channels=d_model, out_channels=d_ff, kernel_size=1)
         self.conv2 = nn.Conv1d(in_channels=d_ff, out_channels=d_model, kernel_size=1)
         self.norm1 = nn.LayerNorm(d_model * rate)
         self.norm2 = nn.LayerNorm(d_model * rate)
         self.dropout = nn.Dropout(dropout)
-        self.mHC = mHC(configs.d_model, configs.rate)
         self.activation = F.relu if activation == "relu" else F.gelu
 
         self.rate = rate
         self.layer_id = layer_id
         self.iter = iter
 
-        self.B = nn.Parameter(torch.ones((rate,), device=device))
+        self.B = torch.ones((rate,))
 
-        self.Am = torch.zeros((rate,), device=device)
+        self.Am = torch.zeros((rate,))
         self.Am[layer_id % rate] = 1.0
-        self.Ar = nn.Parameter(torch.eye(rate), device=device)
+        self.Ar = torch.eye(rate)
 
-        self.alpha_pre = nn.Parameter(torch.ones(1, device=device) * alpha_default)
-        self.alpha_post = nn.Parameter(torch.ones(1, device=device) * alpha_default)
-        self.alpha_res = nn.Parameter(torch.ones(1, device=device) * alpha_default)
+        self.alpha_pre = nn.Parameter(torch.ones(1) * alpha_default)
+        self.alpha_post = nn.Parameter(torch.ones(1) * alpha_default)
+        self.alpha_res = nn.Parameter(torch.ones(1) * alpha_default)
 
-        self.beta_pre = nn.Parameter(torch.ones(1, device=device) * beta_default)
-        self.beta_post = nn.Parameter(torch.ones(1, device=device) * beta_default)
-        self.beta_res = nn.Parameter(torch.ones(1, device=device) * beta_default)
+        self.beta_pre = nn.Parameter(torch.ones(1) * beta_default)
+        self.beta_post = nn.Parameter(torch.ones(1) * beta_default)
+        self.beta_res = nn.Parameter(torch.ones(1) * beta_default)
 
         self.varphi_pre = nn.Parameter(
-            torch.zeros(size=(d_model * rate, rate), device=device)
+            torch.zeros(size=(d_model * rate, rate))
         )
         self.varphi_post = nn.Parameter(
-            torch.zeros(size=(d_model * rate, rate), device=device)
+            torch.zeros(size=(d_model * rate, rate))
         )
         self.varphi_res = nn.Parameter(
-            torch.zeros(size=(d_model * rate, rate * rate), device=device)
+            torch.zeros(size=(d_model * rate, rate * rate))
         )
 
         self.norm3 = nn.LayerNorm(normalized_shape=(d_model, rate))
@@ -82,11 +84,11 @@ class EncoderLayer(nn.Module):
     # X.shape (B, C, D, N)
     def forward(self, x, attn_mask=None, tau=None, delta=None):
         x_t = x.reshape(x.shape[0], x.shape[1], -1)
-        x = self.norm1(x_t)  # (BxLx (DxN) )
+        x = self.norm1(x_t)  # (BxCx (DxN) )
 
         self.compute_Am_Ar_B(x)
 
-        x = x.view(x.shape[0], x.shape[1], self.d_model, self.rate)
+        x = x.contiguous().view(x.shape[0], x.shape[1], self.d_model, self.rate)
         x_in = torch.einsum("bcdn,n->bcd", x, self.Am)
         new_x, attn = self.attention(x_in, x_in, x_in, attn_mask=attn_mask, tau=tau, delta=delta)
 
@@ -96,13 +98,13 @@ class EncoderLayer(nn.Module):
 
         x = self.norm2(x.reshape(x.shape[0], x.shape[1], -1))   
         self.compute_Am_Ar_B(x)
-        x = x.view(x.shape[0], x.shape[1], self.d_model, self.rate)
+        x = x.contiguous().view(x.shape[0], x.shape[1], self.d_model, self.rate)
         x_in = torch.einsum("bcdn,n->bcd", x, self.Am)
         x_new = self.dropout(self.activation(self.conv1(x_in.transpose(-1, 1))))
         x_new = self.dropout(self.conv2(x_new).transpose(-1, 1))
 
         out = torch.einsum("bcdn,nm->bcdm", x, self.Ar) + torch.einsum(
-            "n,bld->bldn", self.B, x_new
+            "n,bcd->bcdn", self.B, x_new
         )
 
         return self.norm3(out), attn
@@ -110,7 +112,7 @@ class EncoderLayer(nn.Module):
     # norm_h.shape (B, C, D * N)
     def compute_Am_Ar_B(self, norm_h):
         # pre-compute
-        norm_h = norm_h.mean(dim=(0,1), keepdim=True).squeeze(0)
+        norm_h = norm_h.mean(dim=(0,1)) # norm_h.shape [D*N]
         Am_t = (self.alpha_pre * (norm_h @ self.varphi_pre) + self.beta_pre)
         self.Am = F.softmax(Am_t, dim=0)
 
@@ -120,7 +122,7 @@ class EncoderLayer(nn.Module):
         self.B = F.softmax(B_t, dim=0)
 
         # res-compute
-        A = (norm_h @ self.varphi_res).view(-1, self.rate, self.rate)
+        A = (norm_h @ self.varphi_res).reshape(self.rate, self.rate)
         Ar_t = self.alpha_res * self.Sinkhorn_Knopp(A, iter=self.iter) + self.beta_res
         
         self.Ar = Ar_t
@@ -138,6 +140,32 @@ class EncoderLayer(nn.Module):
             A = A / (A.sum(dim=-1, keepdim=True) + epsilon)
 
         return A
+class EncoderLayer(nn.Module):
+    def __init__(self, attention, d_model, d_ff=None, dropout=0.1, activation="relu"):
+        super(EncoderLayer, self).__init__()
+        d_ff = d_ff or 4 * d_model
+        self.attention = attention
+        self.conv1 = nn.Conv1d(in_channels=d_model, out_channels=d_ff, kernel_size=1)
+        self.conv2 = nn.Conv1d(in_channels=d_ff, out_channels=d_model, kernel_size=1)
+        self.norm1 = nn.LayerNorm(d_model)
+        self.norm2 = nn.LayerNorm(d_model)
+        self.dropout = nn.Dropout(dropout)
+        self.activation = F.relu if activation == "relu" else F.gelu
+
+    def forward(self, x, attn_mask=None, tau=None, delta=None):
+        new_x, attn = self.attention(
+            x, x, x,
+            attn_mask=attn_mask,
+            tau=tau, delta=delta
+        )
+        x = x + self.dropout(new_x)
+
+        y = x = self.norm1(x)
+        y = self.dropout(self.activation(self.conv1(y.transpose(-1, 1))))
+        y = self.dropout(self.conv2(y).transpose(-1, 1))
+
+        return self.norm2(x + y), attn
+
 
 
 class Encoder(nn.Module):

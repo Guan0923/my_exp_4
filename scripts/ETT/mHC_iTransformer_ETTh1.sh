@@ -2,7 +2,7 @@
 mkdir -p logs
 
 # 定义模型名称
-model_name=iTransformer
+model_name=mHC_iTransformer
 
 # --- 第一个实验 ---
 model_id="${model_name}_ETTh1"
@@ -11,7 +11,6 @@ seq_len=96
 for pred_len in 96 192 336 720
 do
   log_file="logs/${model_id}_${seq_len}_${pred_len}.log"
-
   python -u run.py \
     --is_training 1 \
     --root_path ./dataset/ETT-small/ \
@@ -24,6 +23,11 @@ do
     --pred_len $pred_len \
     --e_layers 6 \
     --enc_in 7 \
+    --rate 4 \
+    --lradj type3\
+    --iter 30 \
+    --alpha 0.1 \
+    --beta 0.1\
     --dec_in 7 \
     --c_out 7 \
     --des 'Exp' \

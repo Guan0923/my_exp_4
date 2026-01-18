@@ -22,6 +22,8 @@ if __name__ == '__main__':
     # mHC config
     parser.add_argument('--rate', type=int, default=4, help='rate of mHC')
     parser.add_argument('--iter', type=int, default=20, help='iter of mHC')
+    parser.add_argument('--alpha', type=float, default=0.1, help='alpha of mHC')
+    parser.add_argument('--beta', type=float, default=0.1, help='beta of mHC')
 
     # data loader
     parser.add_argument('--data', type=str, required=True, default='custom', help='dataset type')
@@ -108,7 +110,7 @@ if __name__ == '__main__':
     else: # MTSF: multivariate time series forecasting
         Exp = Exp_Long_Term_Forecast
 
-
+    total_metrix = []
     if args.is_training:
         for ii in range(args.itr):
             # setting record of experiments
@@ -136,7 +138,7 @@ if __name__ == '__main__':
             exp.train(setting)
 
             print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
-            exp.test(setting)
+            total_metrix.append(exp.test(setting))
 
             if args.do_predict:
                 print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
@@ -168,3 +170,11 @@ if __name__ == '__main__':
         print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
         exp.test(setting, test=1)
         torch.cuda.empty_cache()
+
+    total_metrix = np.array(total_metrix)
+    averages = np.mean(total_metrix, axis=0)
+    metrics = ["MAE", "MSE", "RMSE", "MAPE", "MSPE"]
+    for i in range(0, len(metrics), 2):
+        part1 = f"{metrics[i]}: {averages[i]}" if i < len(metrics) else ""
+        part2 = f"{metrics[i+1]}: {averages[i+1]}" if (i+1) < len(metrics) else ""
+        print(f"{part1}\t{part2}")

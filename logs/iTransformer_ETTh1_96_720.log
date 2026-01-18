@@ -1,0 +1,152 @@
+Args in experiment:
+Namespace(is_training=1, model_id='iTransformer_ETTh1', model='iTransformer', rate=4, iter=20, alpha=0.1, beta=0.1, data='ETTh1', root_path='./dataset/ETT-small/', data_path='ETTh1.csv', features='M', target='OT', freq='h', checkpoints='./checkpoints/', seq_len=96, label_len=48, pred_len=720, enc_in=7, dec_in=7, c_out=7, d_model=256, n_heads=8, e_layers=6, d_layers=1, d_ff=256, moving_avg=25, factor=1, distil=True, dropout=0.1, embed='timeF', activation='gelu', output_attention=False, do_predict=False, num_workers=10, itr=3, train_epochs=10, batch_size=32, patience=3, learning_rate=0.0001, des='Exp', loss='MSE', lradj='type1', use_amp=False, use_gpu=True, gpu=0, use_multi_gpu=False, devices='0,1,2,3', exp_name='MTSF', channel_independence=False, inverse=False, class_strategy='projection', target_root_path='./data/electricity/', target_data_path='electricity.csv', efficient_training=False, use_norm=True, partial_start_index=0)
+Use GPU: cuda:0
+>>>>>>>start training : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll720_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 7825
+val 2161
+test 2161
+	iters: 100, epoch: 1 | loss: 0.6679469
+	speed: 0.0502s/iter; left time: 117.5145s
+	iters: 200, epoch: 1 | loss: 0.5655172
+	speed: 0.0316s/iter; left time: 70.9152s
+Epoch: 1 cost time: 8.709056854248047
+Epoch: 1, Steps: 244 | Train Loss: 0.6658230 Vali Loss: 1.5531701 Test Loss: 0.5205411
+Validation loss decreased (inf --> 1.553170).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 100, epoch: 2 | loss: 0.6358132
+	speed: 0.2745s/iter; left time: 575.5430s
+	iters: 200, epoch: 2 | loss: 0.5924976
+	speed: 0.0336s/iter; left time: 67.1290s
+Epoch: 2 cost time: 8.33026933670044
+Epoch: 2, Steps: 244 | Train Loss: 0.5929239 Vali Loss: 1.5771078 Test Loss: 0.5006905
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 5e-05
+	iters: 100, epoch: 3 | loss: 0.5697003
+	speed: 0.2669s/iter; left time: 494.5459s
+	iters: 200, epoch: 3 | loss: 0.5761074
+	speed: 0.0307s/iter; left time: 53.7904s
+Epoch: 3 cost time: 7.931692123413086
+Epoch: 3, Steps: 244 | Train Loss: 0.5572187 Vali Loss: 1.5929426 Test Loss: 0.5020773
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 2.5e-05
+	iters: 100, epoch: 4 | loss: 0.4867889
+	speed: 0.2717s/iter; left time: 437.2324s
+	iters: 200, epoch: 4 | loss: 0.5909252
+	speed: 0.0329s/iter; left time: 49.6781s
+Epoch: 4 cost time: 8.298539638519287
+Epoch: 4, Steps: 244 | Train Loss: 0.5387603 Vali Loss: 1.6026020 Test Loss: 0.5049946
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll720_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2161
+test shape: (2161, 1, 720, 7) (2161, 1, 720, 7)
+test shape: (2161, 720, 7) (2161, 720, 7)
+Use GPU: cuda:0
+>>>>>>>start training : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll720_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_1>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 7825
+val 2161
+test 2161
+	iters: 100, epoch: 1 | loss: 0.6224576
+	speed: 0.0374s/iter; left time: 87.4600s
+	iters: 200, epoch: 1 | loss: 0.5968200
+	speed: 0.0324s/iter; left time: 72.6907s
+Epoch: 1 cost time: 8.47443437576294
+Epoch: 1, Steps: 244 | Train Loss: 0.6663590 Vali Loss: 1.5462673 Test Loss: 0.5127140
+Validation loss decreased (inf --> 1.546267).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 100, epoch: 2 | loss: 0.5777819
+	speed: 0.2809s/iter; left time: 589.0441s
+	iters: 200, epoch: 2 | loss: 0.5397984
+	speed: 0.0328s/iter; left time: 65.5662s
+Epoch: 2 cost time: 8.475534677505493
+Epoch: 2, Steps: 244 | Train Loss: 0.5945924 Vali Loss: 1.5428050 Test Loss: 0.5047590
+Validation loss decreased (1.546267 --> 1.542805).  Saving model ...
+Updating learning rate to 5e-05
+	iters: 100, epoch: 3 | loss: 0.6097169
+	speed: 0.2729s/iter; left time: 505.7310s
+	iters: 200, epoch: 3 | loss: 0.6170555
+	speed: 0.0323s/iter; left time: 56.5715s
+Epoch: 3 cost time: 8.318047523498535
+Epoch: 3, Steps: 244 | Train Loss: 0.5601210 Vali Loss: 1.5420301 Test Loss: 0.4984589
+Validation loss decreased (1.542805 --> 1.542030).  Saving model ...
+Updating learning rate to 2.5e-05
+	iters: 100, epoch: 4 | loss: 0.5118323
+	speed: 0.2758s/iter; left time: 443.8392s
+	iters: 200, epoch: 4 | loss: 0.5605715
+	speed: 0.0332s/iter; left time: 50.1089s
+Epoch: 4 cost time: 8.528935432434082
+Epoch: 4, Steps: 244 | Train Loss: 0.5417367 Vali Loss: 1.5535432 Test Loss: 0.5118393
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 1.25e-05
+	iters: 100, epoch: 5 | loss: 0.5564484
+	speed: 0.2742s/iter; left time: 374.3173s
+	iters: 200, epoch: 5 | loss: 0.5266243
+	speed: 0.0322s/iter; left time: 40.7952s
+Epoch: 5 cost time: 8.393489599227905
+Epoch: 5, Steps: 244 | Train Loss: 0.5337929 Vali Loss: 1.5594312 Test Loss: 0.4955993
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 6.25e-06
+	iters: 100, epoch: 6 | loss: 0.6250089
+	speed: 0.2735s/iter; left time: 306.5463s
+	iters: 200, epoch: 6 | loss: 0.5629017
+	speed: 0.0324s/iter; left time: 33.0620s
+Epoch: 6 cost time: 8.429072380065918
+Epoch: 6, Steps: 244 | Train Loss: 0.5308374 Vali Loss: 1.5649068 Test Loss: 0.4964259
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll720_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2161
+test shape: (2161, 1, 720, 7) (2161, 1, 720, 7)
+test shape: (2161, 720, 7) (2161, 720, 7)
+Use GPU: cuda:0
+>>>>>>>start training : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll720_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_2>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 7825
+val 2161
+test 2161
+	iters: 100, epoch: 1 | loss: 0.6712207
+	speed: 0.0374s/iter; left time: 87.6145s
+	iters: 200, epoch: 1 | loss: 0.5694000
+	speed: 0.0334s/iter; left time: 74.7473s
+Epoch: 1 cost time: 8.675573110580444
+Epoch: 1, Steps: 244 | Train Loss: 0.6637852 Vali Loss: 1.5539706 Test Loss: 0.5309007
+Validation loss decreased (inf --> 1.553971).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 100, epoch: 2 | loss: 0.5753164
+	speed: 0.2859s/iter; left time: 599.5633s
+	iters: 200, epoch: 2 | loss: 0.5812702
+	speed: 0.0329s/iter; left time: 65.7119s
+Epoch: 2 cost time: 8.550694942474365
+Epoch: 2, Steps: 244 | Train Loss: 0.5932911 Vali Loss: 1.5435004 Test Loss: 0.5375951
+Validation loss decreased (1.553971 --> 1.543500).  Saving model ...
+Updating learning rate to 5e-05
+	iters: 100, epoch: 3 | loss: 0.5349947
+	speed: 0.2794s/iter; left time: 517.7055s
+	iters: 200, epoch: 3 | loss: 0.6151645
+	speed: 0.0333s/iter; left time: 58.3420s
+Epoch: 3 cost time: 8.591311693191528
+Epoch: 3, Steps: 244 | Train Loss: 0.5580085 Vali Loss: 1.5537580 Test Loss: 0.4935201
+EarlyStopping counter: 1 out of 3
+Updating learning rate to 2.5e-05
+	iters: 100, epoch: 4 | loss: 0.5692562
+	speed: 0.2881s/iter; left time: 463.5637s
+	iters: 200, epoch: 4 | loss: 0.5720692
+	speed: 0.0335s/iter; left time: 50.5403s
+Epoch: 4 cost time: 8.778297424316406
+Epoch: 4, Steps: 244 | Train Loss: 0.5410849 Vali Loss: 1.5591899 Test Loss: 0.5090792
+EarlyStopping counter: 2 out of 3
+Updating learning rate to 1.25e-05
+	iters: 100, epoch: 5 | loss: 0.4994334
+	speed: 0.2809s/iter; left time: 383.4790s
+	iters: 200, epoch: 5 | loss: 0.4933631
+	speed: 0.0349s/iter; left time: 44.1403s
+Epoch: 5 cost time: 8.636205673217773
+Epoch: 5, Steps: 244 | Train Loss: 0.5335852 Vali Loss: 1.5718832 Test Loss: 0.5071914
+EarlyStopping counter: 3 out of 3
+Early stopping
+>>>>>>>testing : iTransformer_ETTh1_iTransformer_ETTh1_M_ft96_sl48_ll720_pl256_dm8_nh6_el1_dl256_df1_fctimeF_ebTrue_dtExp_projection_2<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2161
+test shape: (2161, 1, 720, 7) (2161, 1, 720, 7)
+test shape: (2161, 720, 7) (2161, 720, 7)
+MAE: 0.4984818994998932	MSE: 0.5188650488853455
+RMSE: 0.7202367782592773	MAPE: 12.279109954833984
+MSPE: 56335.98046875	
