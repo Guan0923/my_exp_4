@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from layers.Transformer_EncDec import Encoder, mHC_EncoderLayer
+from layers.Transformer_EncDec import Encoder, mHC_EncoderLayer_2
 from layers.SelfAttention_Family import FullAttention, AttentionLayer
 from layers.Embed import DataEmbedding_inverted
 import numpy as np
@@ -24,16 +24,13 @@ class Model(nn.Module):
         # Encoder-only architecture
         self.encoder = Encoder(
             [
-                mHC_EncoderLayer(
+                mHC_EncoderLayer_2(
                     AttentionLayer(
                         FullAttention(False, configs.factor, attention_dropout=configs.dropout,
                                       output_attention=configs.output_attention), configs.d_model, configs.n_heads),
                     configs.d_model,
                     configs.rate,
                     configs.iter,
-                    l,
-                    configs.alpha,
-                    configs.beta,
                     configs.d_ff,
                     dropout=configs.dropout,
                     activation=configs.activation

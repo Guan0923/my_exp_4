@@ -25,6 +25,76 @@ class ConvLayer(nn.Module):
         x = x.transpose(1, 2)
         return x
 
+class mHC_EncoderLayer_2(nn.Module):
+    def __init__(
+        self,
+        attention,
+        d_model,
+        rate,
+        iter,
+        d_ff=None,
+        dropout=0.1,
+        activation="relu",
+    ):
+        super(mHC_EncoderLayer, self).__init__()
+        d_ff = d_ff or 4 * d_model
+        self.d_model = d_model
+        self.attention = attention
+        self.conv1 = nn.Conv1d(in_channels=d_model, out_channels=d_ff, kernel_size=1)
+        self.conv2 = nn.Conv1d(in_channels=d_ff, out_channels=d_model, kernel_size=1)
+        self.norm1 = nn.LayerNorm(normalized_shape=(d_model, rate))
+        self.norm2 = nn.LayerNorm(normalized_shape=(d_model, rate))
+        self.dropout = nn.Dropout(dropout)
+
+        self.activation = F.relu if activation == "gelu" else F.gelu
+
+        self.rate = rate
+        self.iter = iter
+
+        self.B = nn.Parameter(torch.ones((rate,))/rate)
+        self.Am = nn.Parameter(torch.ones((rate,))/rate)
+        self.Ar = nn.Parameter(torch.eye(rate))
+
+        self.norm3 = nn.LayerNorm(normalized_shape=(d_model, rate))
+
+    # X.shape (B, C, D, N)
+    def forward(self, x, attn_mask=None, tau=None, delta=None):
+        A_r = self.Sinkhorn_Knopp(self.Ar, iter=self.iter)
+
+        x = self.norm1(x)  # (BxCxDxN)
+
+        x_in = torch.einsum("bcdn,n->bcd", x, self.Am)
+        new_x, attn = self.attention(x_in, x_in, x_in, attn_mask=attn_mask, tau=tau, delta=delta)
+
+        x = torch.einsum("bcdn,nm->bcdm", self.dropout(x), A_r) + torch.einsum(
+            "n,bld->bldn", self.B, new_x
+        )
+
+        y = x = self.norm2(x)   
+        y = torch.einsum("bcdn,n->bcd", y, self.Am)
+        y = self.dropout(self.activation(self.conv1(y.transpose(-1, 1))))
+        y = self.dropout(self.conv2(y).transpose(-1, 1))
+
+        out = torch.einsum("bcdn,nm->bcdm", x, A_r) + torch.einsum(
+            "n,bcd->bcdn", self.B, y
+        )
+
+        return self.norm3(out), attn
+
+    def Sinkhorn_Knopp(self, A, iter=20, epsilon=1e-8):
+        # A 的形状: [N, N]
+
+        # 1. 数值稳定化与指数映射
+        A = A - A.max(dim=-1, keepdim=True)[0].max(dim=-2, keepdim=True)[0]
+        A = torch.exp(A)
+
+        # 2. 迭代归一化 (关键：指定 dim=-1 和 dim=-2)
+        for _ in range(iter):
+            A = A / (A.sum(dim=-2, keepdim=True) + epsilon)
+            A = A / (A.sum(dim=-1, keepdim=True) + epsilon)
+
+        return A
+
 
 class mHC_EncoderLayer(nn.Module):
     def __init__(
@@ -55,7 +125,7 @@ class mHC_EncoderLayer(nn.Module):
         self.layer_id = layer_id
         self.iter = iter
 
-        self.B = torch.ones((rate,))
+        self.B = torch.ones((rate,)/rate)
 
         self.Am = torch.zeros((rate,))
         self.Am[layer_id % rate] = 1.0
@@ -127,19 +197,19 @@ class mHC_EncoderLayer(nn.Module):
         
         self.Ar = Ar_t
 
-    def Sinkhorn_Knopp(self, A, iter=20, epsilon=1e-8):
-        # A 的形状: [B, L, N, N]
+    def Sinkhorn_Knopp(self, A, iter=20, epsilon=1e-6):
+        with torch.no_grad():
+            # 1. 数值稳定化与指数映射
+            A = A - A.max()
+            A = torch.exp(A)
 
-        # 1. 数值稳定化与指数映射
-        A = A - A.max(dim=-1, keepdim=True)[0].max(dim=-2, keepdim=True)[0]
-        A = torch.exp(A)
+            # 2. 迭代归一化 (关键：指定 dim=-1 和 dim=-2)
+            for _ in range(iter):
+                A = A / (A.sum(dim=-2, keepdim=True) + epsilon)
+                A = A / (A.sum(dim=-1, keepdim=True) + epsilon)
 
-        # 2. 迭代归一化 (关键：指定 dim=-1 和 dim=-2)
-        for _ in range(iter):
-            A = A / (A.sum(dim=-2, keepdim=True) + epsilon)
-            A = A / (A.sum(dim=-1, keepdim=True) + epsilon)
+            return A
 
-        return A
 class EncoderLayer(nn.Module):
     def __init__(self, attention, d_model, d_ff=None, dropout=0.1, activation="relu"):
         super(EncoderLayer, self).__init__()
