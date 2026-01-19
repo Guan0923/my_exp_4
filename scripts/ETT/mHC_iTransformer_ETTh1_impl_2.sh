@@ -2,7 +2,7 @@
 mkdir -p logs
 
 # 定义模型名称
-model_name=mHC_iTransformer_impl_2
+model_name=mHC_iTransformer_impl2
 
 # --- 第一个实验 ---
 model_id="${model_name}_ETTh1"
