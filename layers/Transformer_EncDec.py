@@ -36,7 +36,7 @@ class mHC_EncoderLayer_2(nn.Module):
         dropout=0.1,
         activation="relu",
     ):
-        super(mHC_EncoderLayer, self).__init__()
+        super(mHC_EncoderLayer_2, self).__init__()
         d_ff = d_ff or 4 * d_model
         self.d_model = d_model
         self.attention = attention
