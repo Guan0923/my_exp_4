@@ -25,7 +25,7 @@ do
     --enc_in 7 \
     --rate 4 \
     --lradj type3\
-    --iter 30 \
+    --iter 20 \
     --alpha 0.1 \
     --beta 0.1\
     --dec_in 7 \

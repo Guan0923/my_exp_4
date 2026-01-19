@@ -46,7 +46,7 @@ class mHC_EncoderLayer_2(nn.Module):
         self.norm2 = nn.LayerNorm(normalized_shape=(d_model, rate))
         self.dropout = nn.Dropout(dropout)
 
-        self.activation = F.relu if activation == "gelu" else F.gelu
+        self.activation = F.relu if activation == "relu" else F.gelu
 
         self.rate = rate
         self.iter = iter
@@ -158,7 +158,7 @@ class mHC_EncoderLayer(nn.Module):
 
         self.compute_Am_Ar_B(x)
 
-        x = x.contiguous().view(x.shape[0], x.shape[1], self.d_model, self.rate)
+        x = x.reshape(x.shape[0], x.shape[1], self.d_model, self.rate)
         x_in = torch.einsum("bcdn,n->bcd", x, self.Am)
         new_x, attn = self.attention(x_in, x_in, x_in, attn_mask=attn_mask, tau=tau, delta=delta)
 
@@ -168,7 +168,7 @@ class mHC_EncoderLayer(nn.Module):
 
         x = self.norm2(x.reshape(x.shape[0], x.shape[1], -1))   
         self.compute_Am_Ar_B(x)
-        x = x.contiguous().view(x.shape[0], x.shape[1], self.d_model, self.rate)
+        x = x.reshape(x.shape[0], x.shape[1], self.d_model, self.rate)
         x_in = torch.einsum("bcdn,n->bcd", x, self.Am)
         x_new = self.dropout(self.activation(self.conv1(x_in.transpose(-1, 1))))
         x_new = self.dropout(self.conv2(x_new).transpose(-1, 1))

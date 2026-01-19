@@ -24,8 +24,9 @@ do
     --e_layers 6 \
     --enc_in 7 \
     --rate 4 \
-    --iter 30 \
+    --iter 20 \
     --dec_in 7 \
+    --lradj type3\
     --c_out 7 \
     --des 'Exp' \
     --d_model 256 \
