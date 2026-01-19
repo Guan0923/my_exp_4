@@ -125,7 +125,7 @@ class mHC_EncoderLayer(nn.Module):
         self.layer_id = layer_id
         self.iter = iter
 
-        self.B = torch.ones((rate,)/rate)
+        self.B = torch.ones((rate,))/rate
 
         self.Am = torch.zeros((rate,))
         self.Am[layer_id % rate] = 1.0

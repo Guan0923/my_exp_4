@@ -4,6 +4,7 @@ from model import (
     Transformer,
     iTransformer,
     mHC_iTransformer,
+    mHC_iTransformer_impl2
 )
 
 
@@ -14,6 +15,7 @@ class Exp_Basic(object):
             "Transformer": Transformer,
             "iTransformer": iTransformer,
             "mHC_iTransformer": mHC_iTransformer,
+            "mHC_iTransformer_impl2": mHC_iTransformer_impl2,
         }
         self.device = self._acquire_device()
         self.model = self._build_model().to(self.device)

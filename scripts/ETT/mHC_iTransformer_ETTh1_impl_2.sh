@@ -8,7 +8,7 @@ model_name=mHC_iTransformer_impl_2
 model_id="${model_name}_ETTh1"
 seq_len=96
 
-for pred_len in 96 192 336 720
+for pred_len in 96 192
 do
   log_file="logs/${model_id}_${seq_len}_${pred_len}.log"
   python -u run.py \
@@ -21,7 +21,7 @@ do
     --features M \
     --seq_len $seq_len \
     --pred_len $pred_len \
-    --e_layers 6 \
+    --e_layers 4 \
     --enc_in 7 \
     --rate 4 \
     --iter 20 \
